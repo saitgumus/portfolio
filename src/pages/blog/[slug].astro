@@ -4,11 +4,11 @@ import FormatDate from "@/components/FormatDate.astro";
 import type { CollectionEntry } from "astro:content";
 import { getCollection } from "astro:content";
 
-const blogFilter = ({ data }: CollectionEntry<"blog">) =>
-  import.meta.env.DEV || !data.draft;
-
 export async function getStaticPaths() {
-  const posts = await getCollection("blog", blogFilter);
+  const posts = await getCollection(
+    "blog",
+    ({ data }: CollectionEntry<"blog">) => import.meta.env.DEV || !data.draft,
+  );
   return posts.map((post) => ({
     params: { slug: post.slug },
     props: { post },
