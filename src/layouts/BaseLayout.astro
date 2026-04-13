@@ -1,0 +1,50 @@
+---
+import "../styles/global.css";
+import Header from "@/components/Header.astro";
+import Footer from "@/components/Footer.astro";
+import { SITE_DESCRIPTION, SITE_TITLE, SITE_URL } from "@/consts";
+
+interface Props {
+  title?: string;
+  description?: string;
+  ogImage?: string;
+}
+
+const { title, description = SITE_DESCRIPTION, ogImage } = Astro.props;
+const pageTitle = title ? `${title} · ${SITE_TITLE}` : `${SITE_TITLE} · Portfolio`;
+const canonical = Astro.site
+  ? new URL(Astro.url.pathname, Astro.site).href
+  : new URL(Astro.url.pathname, SITE_URL).href;
+const ogUrl = ogImage ? new URL(ogImage, Astro.site ?? SITE_URL).href : undefined;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="generator" content={Astro.generator} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="alternate" type="application/rss+xml" title={SITE_TITLE} href="/rss.xml" />
+    <title>{pageTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:site_name" content={SITE_TITLE} />
+    {ogUrl && <meta property="og:image" content={ogUrl} />}
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={pageTitle} />
+    <meta name="twitter:description" content={description} />
+    {ogUrl && <meta name="twitter:image" content={ogUrl} />}
+  </head>
+  <body class="min-h-dvh flex flex-col">
+    <Header />
+    <main class="mx-auto w-full max-w-3xl flex-1 px-4 py-10 sm:px-6">
+      <slot />
+    </main>
+    <Footer />
+  </body>
+</html>

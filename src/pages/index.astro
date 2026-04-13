@@ -1,0 +1,72 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import ProjectCard from "@/components/ProjectCard.astro";
+import FormatDate from "@/components/FormatDate.astro";
+import { SITE_DESCRIPTION } from "@/consts";
+import { getCollection } from "astro:content";
+
+const blogFilter = ({ data }: { data: { draft?: boolean } }) =>
+  import.meta.env.DEV || !data.draft;
+
+const posts = (await getCollection("blog", blogFilter)).sort(
+  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
+);
+const projects = (await getCollection("projects")).sort(
+  (a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
+);
+const featured = projects.filter((p) => p.data.featured);
+const latestPosts = posts.slice(0, 3);
+---
+
+<BaseLayout description={SITE_DESCRIPTION}>
+  <section class="space-y-4">
+    <p class="text-sm font-medium uppercase tracking-wide text-sky-400/90">Hello</p>
+    <h1 class="text-3xl font-semibold tracking-tight text-zinc-50 sm:text-4xl">
+      I’m Sait — I build software and write about it.
+    </h1>
+    <p class="max-w-2xl text-lg leading-relaxed text-zinc-400">
+      This site collects <a href="/projects/">projects</a> I ship and <a href="/blog/">articles</a> I publish. Everything
+      is versioned in Git and deployed to Cloudflare Pages.
+    </p>
+  </section>
+
+  <section class="mt-14 space-y-6" aria-labelledby="featured-heading">
+    <div class="flex items-end justify-between gap-4">
+      <h2 id="featured-heading" class="text-lg font-semibold text-zinc-100">Featured projects</h2>
+      <a href="/projects/" class="text-sm font-medium text-zinc-400 no-underline hover:text-zinc-200">View all</a>
+    </div>
+    <div class="grid gap-4 sm:grid-cols-2">
+      {
+        featured.length > 0 ? (
+          featured.map((project) => <ProjectCard project={project} />)
+        ) : (
+          <p class="text-sm text-zinc-500">Mark a project with <code class="text-zinc-300">featured: true</code> in frontmatter.</p>
+        )
+      }
+    </div>
+  </section>
+
+  <section class="mt-14 space-y-6" aria-labelledby="writing-heading">
+    <div class="flex items-end justify-between gap-4">
+      <h2 id="writing-heading" class="text-lg font-semibold text-zinc-100">Latest writing</h2>
+      <a href="/blog/" class="text-sm font-medium text-zinc-400 no-underline hover:text-zinc-200">Archive</a>
+    </div>
+    <ul class="divide-y divide-zinc-800 rounded-xl border border-zinc-800 bg-zinc-900/30">
+      {
+        latestPosts.map((post) => (
+          <li class="flex flex-col gap-1 px-4 py-4 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
+            <div>
+              <a href={`/blog/${post.slug}/`} class="text-base font-medium text-zinc-100 no-underline hover:text-white">
+                {post.data.title}
+              </a>
+              <p class="mt-1 text-sm text-zinc-500">{post.data.description}</p>
+            </div>
+            <p class="shrink-0 text-sm text-zinc-500">
+              <FormatDate date={post.data.pubDate} />
+            </p>
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+</BaseLayout>

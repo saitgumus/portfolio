@@ -1,0 +1,65 @@
+---
+import type { CollectionEntry } from "astro:content";
+import FormatDate from "./FormatDate.astro";
+
+interface Props {
+  project: CollectionEntry<"projects">;
+}
+const { project } = Astro.props;
+const { title, description, date, tags, repoUrl, demoUrl } = project.data;
+---
+
+<article
+  class="group flex flex-col rounded-xl border border-zinc-800 bg-zinc-900/40 p-5 shadow-sm transition hover:border-zinc-700 hover:bg-zinc-900/70"
+>
+  <div class="flex flex-1 flex-col gap-3">
+    <div class="flex flex-wrap items-center gap-2 text-xs text-zinc-500">
+      <FormatDate date={date} />
+      {
+        tags.length > 0 && (
+          <span class="hidden sm:inline" aria-hidden="true">
+            ·
+          </span>
+        )
+      }
+      {
+        tags.slice(0, 4).map((t) => (
+          <span class="rounded-full bg-zinc-800 px-2 py-0.5 text-[11px] font-medium text-zinc-300">
+            {t}
+          </span>
+        ))
+      }
+    </div>
+    <h2 class="text-lg font-semibold tracking-tight text-zinc-50">
+      <a
+        href={`/projects/${project.slug}/`}
+        class="text-inherit no-underline decoration-zinc-600 decoration-2 underline-offset-4 group-hover:underline"
+      >
+        {title}
+      </a>
+    </h2>
+    <p class="text-sm leading-relaxed text-zinc-400">{description}</p>
+  </div>
+  <div class="mt-4 flex flex-wrap gap-3 text-sm">
+    <a
+      href={`/projects/${project.slug}/`}
+      class="font-medium text-sky-400 no-underline hover:text-sky-300"
+    >
+      Details
+    </a>
+    {
+      demoUrl && (
+        <a href={demoUrl} class="text-zinc-400 no-underline hover:text-zinc-200" rel="noreferrer" target="_blank">
+          Live
+        </a>
+      )
+    }
+    {
+      repoUrl && (
+        <a href={repoUrl} class="text-zinc-400 no-underline hover:text-zinc-200" rel="noreferrer" target="_blank">
+          Repo
+        </a>
+      )
+    }
+  </div>
+</article>

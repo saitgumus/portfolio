@@ -1,0 +1,42 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import FormatDate from "@/components/FormatDate.astro";
+import { getCollection } from "astro:content";
+
+const blogFilter = ({ data }: { data: { draft?: boolean } }) =>
+  import.meta.env.DEV || !data.draft;
+
+const posts = (await getCollection("blog", blogFilter)).sort(
+  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
+);
+---
+
+<BaseLayout title="Blog" description="Articles on building software, tooling, and lessons learned.">
+  <header class="mb-10 space-y-3">
+    <h1 class="text-3xl font-semibold tracking-tight text-zinc-50">Blog</h1>
+    <p class="max-w-2xl text-lg text-zinc-400">
+      Markdown files in <code class="text-sm text-zinc-300">src/content/blog/</code>. Drafts stay local until you ship
+      a production build.
+    </p>
+  </header>
+  <ul class="divide-y divide-zinc-800 rounded-xl border border-zinc-800 bg-zinc-900/30">
+    {
+      posts.map((post) => (
+        <li class="flex flex-col gap-2 px-4 py-5 sm:flex-row sm:items-start sm:justify-between sm:gap-6">
+          <div class="space-y-1">
+            <a href={`/blog/${post.slug}/`} class="text-lg font-medium text-zinc-100 no-underline hover:text-white">
+              {post.data.title}
+            </a>
+            <p class="text-sm text-zinc-500">{post.data.description}</p>
+            {post.data.tags.length > 0 && (
+              <p class="text-xs text-zinc-600">{post.data.tags.join(" · ")}</p>
+            )}
+          </div>
+          <p class="shrink-0 text-sm text-zinc-500">
+            <FormatDate date={post.data.pubDate} />
+          </p>
+        </li>
+      ))
+    }
+  </ul>
+</BaseLayout>

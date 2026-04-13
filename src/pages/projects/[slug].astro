@@ -1,0 +1,65 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import FormatDate from "@/components/FormatDate.astro";
+import type { CollectionEntry } from "astro:content";
+import { getCollection } from "astro:content";
+
+export async function getStaticPaths() {
+  const projects = await getCollection("projects");
+  return projects.map((project) => ({
+    params: { slug: project.slug },
+    props: { project },
+  }));
+}
+
+interface Props {
+  project: CollectionEntry<"projects">;
+}
+
+const { project } = Astro.props;
+const { Content } = await project.render();
+const { title, description, date, tags, repoUrl, demoUrl } = project.data;
+---
+
+<BaseLayout title={title} description={description}>
+  <article>
+    <header class="mb-8 space-y-4 border-b border-zinc-800 pb-8">
+      <p class="text-sm text-zinc-500">
+        <FormatDate date={date} />
+        {
+          tags.length > 0 && (
+            <>
+              <span class="mx-2" aria-hidden="true">
+                ·
+              </span>
+              {tags.join(" · ")}
+            </>
+          )
+        }
+      </p>
+      <h1 class="text-3xl font-semibold tracking-tight text-zinc-50 sm:text-4xl">{title}</h1>
+      <p class="text-lg text-zinc-400">{description}</p>
+      <div class="flex flex-wrap gap-4 text-sm">
+        {
+          demoUrl && (
+            <a href={demoUrl} rel="noreferrer" target="_blank" class="font-medium text-sky-400 no-underline">
+              Live demo
+            </a>
+          )
+        }
+        {
+          repoUrl && (
+            <a href={repoUrl} rel="noreferrer" target="_blank" class="font-medium text-sky-400 no-underline">
+              Repository
+            </a>
+          )
+        }
+      </div>
+    </header>
+    <div
+      class="article-content space-y-4 text-base leading-relaxed text-zinc-300 [&_h2]:mt-10 [&_h2]:text-xl [&_h2]:font-semibold [&_h2]:text-zinc-100 [&_li]:mt-2 [&_ol]:list-decimal [&_ol]:pl-6 [&_p]:mt-4 [&_ul]:list-disc [&_ul]:pl-6"
+    >
+      <Content />
+    </div>
+  </article>
+</BaseLayout>
