@@ -2,7 +2,6 @@
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import ProjectCard from "@/components/ProjectCard.astro";
 import FormatDate from "@/components/FormatDate.astro";
-import { SITE_DESCRIPTION } from "@/consts";
 import { getCollection } from "astro:content";
 
 const blogFilter = ({ data }: { data: { draft?: boolean } }) =>
@@ -16,21 +15,95 @@ const projects = (await getCollection("projects")).sort(
 );
 const featured = projects.filter((p) => p.data.featured);
 const latestPosts = posts.slice(0, 3);
+
+const homeDescription =
+  "Senior software engineer building scalable products and complex backend systems — capital markets infrastructure, cloud-native apps, microservices, and end-to-end delivery.";
 ---
 
-<BaseLayout description={SITE_DESCRIPTION}>
-  <section class="space-y-4">
-    <p class="text-sm font-medium uppercase tracking-wide text-sky-400/90">Hello</p>
-    <h1 class="text-3xl font-semibold tracking-tight text-zinc-50 sm:text-4xl">
-      I’m Sait — I build software and write about it.
+<BaseLayout description={homeDescription}>
+  <section class="space-y-5">
+    <p class="text-sm font-medium uppercase tracking-wide text-sky-400/90">Senior Software Engineer</p>
+    <h1 class="text-balance text-3xl font-semibold tracking-tight text-zinc-50 sm:text-4xl">
+      I build reliable software for products, platforms, and complex systems.
     </h1>
     <p class="max-w-2xl text-lg leading-relaxed text-zinc-400">
-      This site collects <a href="/projects/">projects</a> I ship and <a href="/blog/">articles</a> I publish. Everything
-      is versioned in Git and deployed to Cloudflare Pages.
+      I’m Sait Gumus, a software engineer currently focused on capital markets and securities infrastructure. I build
+      maintainable systems across backend, web, and delivery workflows, with a focus on clarity, scalability, and
+      long-term quality.
+    </p>
+    <p class="text-sm text-zinc-500">
+      <span class="font-medium text-zinc-400">Currently</span> Software Engineer at MKK
+      <span class="mx-1.5 text-zinc-600" aria-hidden="true">·</span>
+      <span class="font-medium text-zinc-400">Previously</span> Software Developer at Trendyol Group
+    </p>
+    <div class="flex flex-wrap gap-3 pt-1">
+      <a
+        href="/projects/"
+        class="inline-flex items-center rounded-md border border-zinc-600 bg-zinc-900 px-4 py-2 text-sm font-medium text-zinc-50 no-underline hover:border-zinc-500 hover:bg-zinc-800"
+      >
+        View Projects
+      </a>
+      <a
+        href="/blog/"
+        class="inline-flex items-center rounded-md border border-zinc-700 bg-transparent px-4 py-2 text-sm font-medium text-zinc-200 no-underline hover:border-zinc-600 hover:bg-zinc-900/80"
+      >
+        Read Writing
+      </a>
+      <a
+        href="/about/"
+        class="inline-flex items-center rounded-md border border-zinc-700 bg-transparent px-4 py-2 text-sm font-medium text-zinc-200 no-underline hover:border-zinc-600 hover:bg-zinc-900/80"
+      >
+        Contact Me
+      </a>
+    </div>
+  </section>
+
+  <section
+    class="mt-12 max-w-2xl space-y-4 border-t border-zinc-800/80 pt-10 text-base leading-relaxed text-zinc-400"
+    aria-labelledby="how-i-work-heading"
+  >
+    <h2 id="how-i-work-heading" class="text-sm font-medium uppercase tracking-wide text-sky-400/90">How I work</h2>
+    <p>
+      I work across backend systems, product engineering, and delivery infrastructure. My experience includes software
+      development in large-scale product environments and regulated financial infrastructure, with a focus on scalable
+      architecture, clean implementation, and dependable delivery.
+    </p>
+    <p>
+      Alongside that, I ship focused product and integration work—such as applications for Brassco and TTLock-style
+      backend integrations—and personal projects that keep my tooling and craft sharp.
     </p>
   </section>
 
+  <section class="mt-10 space-y-4" aria-labelledby="value-heading">
+    <h2 id="value-heading" class="text-lg font-semibold text-zinc-100">What I bring</h2>
+    <ul class="list-inside list-disc space-y-2 text-base leading-relaxed text-zinc-400 marker:text-sky-400/80">
+      <li>Scalable backend and platform-oriented engineering.</li>
+      <li>Clean architecture with a focus on maintainability.</li>
+      <li>End-to-end ownership, from design to deployment.</li>
+      <li>Experience with cloud-native systems, integrations, and delivery automation.</li>
+    </ul>
+  </section>
+
+  <section class="mt-10 space-y-3" aria-labelledby="areas-heading">
+    <h2 id="areas-heading" class="text-lg font-semibold text-zinc-100">Areas I work in</h2>
+    <p class="max-w-2xl text-sm leading-relaxed text-zinc-500">
+      Representative themes from production work—not an exhaustive skill matrix.
+    </p>
+    <ul class="flex flex-wrap gap-2 text-sm">
+      <li class="rounded-full border border-zinc-800 bg-zinc-900/50 px-3 py-1 text-zinc-300">Backend systems</li>
+      <li class="rounded-full border border-zinc-800 bg-zinc-900/50 px-3 py-1 text-zinc-300">Cloud-native applications</li>
+      <li class="rounded-full border border-zinc-800 bg-zinc-900/50 px-3 py-1 text-zinc-300">Microservices</li>
+      <li class="rounded-full border border-zinc-800 bg-zinc-900/50 px-3 py-1 text-zinc-300">Event-driven systems</li>
+      <li class="rounded-full border border-zinc-800 bg-zinc-900/50 px-3 py-1 text-zinc-300">CI/CD</li>
+      <li class="rounded-full border border-zinc-800 bg-zinc-900/50 px-3 py-1 text-zinc-300">Product engineering</li>
+    </ul>
+  </section>
+
   <section class="mt-14 space-y-6" aria-labelledby="featured-heading">
+    <p class="max-w-2xl text-base leading-relaxed text-zinc-400">
+      A mix of production-style product and integration work with personal projects that show how I think about code,
+      delivery, and long-term maintainability.
+    </p>
     <div class="flex items-end justify-between gap-4">
       <h2 id="featured-heading" class="text-lg font-semibold text-zinc-100">Featured projects</h2>
       <a href="/projects/" class="text-sm font-medium text-zinc-400 no-underline hover:text-zinc-200">View all</a>
@@ -40,13 +113,19 @@ const latestPosts = posts.slice(0, 3);
         featured.length > 0 ? (
           featured.map((project) => <ProjectCard project={project} />)
         ) : (
-          <p class="text-sm text-zinc-500">Mark a project with <code class="text-zinc-300">featured: true</code> in frontmatter.</p>
+          <p class="text-sm text-zinc-500">
+            Mark a project with <code class="text-zinc-300">featured: true</code> in frontmatter.
+          </p>
         )
       }
     </div>
   </section>
 
   <section class="mt-14 space-y-6" aria-labelledby="writing-heading">
+    <p class="max-w-2xl text-base leading-relaxed text-zinc-400">
+      I use writing to clarify ideas, document decisions, and share what I learn while building software. This blog is
+      where I collect notes on engineering, tools, and the craft of making things that last.
+    </p>
     <div class="flex items-end justify-between gap-4">
       <h2 id="writing-heading" class="text-lg font-semibold text-zinc-100">Latest writing</h2>
       <a href="/blog/" class="text-sm font-medium text-zinc-400 no-underline hover:text-zinc-200">Archive</a>
@@ -68,5 +147,15 @@ const latestPosts = posts.slice(0, 3);
         ))
       }
     </ul>
+  </section>
+
+  <section class="mt-16 border-t border-zinc-800/80 pt-10" aria-labelledby="closing-heading">
+    <h2 id="closing-heading" class="sr-only">More about me</h2>
+    <p class="max-w-2xl text-base leading-relaxed text-zinc-400">
+      Outside of work, I’m a father of two, a lifelong learner, and someone who values steady improvement in both
+      engineering and life. I’m especially interested in software craftsmanship, clear thinking, and building systems
+      that remain useful beyond their first version. More on my path and focus areas on the{" "}
+      <a href="/about/" class="font-medium text-sky-400 no-underline hover:text-sky-300">About</a> page.
+    </p>
   </section>
 </BaseLayout>
